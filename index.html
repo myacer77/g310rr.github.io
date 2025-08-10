@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ PYQ Galaxy | Class 10 & 12</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #f5f6fa;
+            --glass: rgba(255, 255, 255, 0.2);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ff7675, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--glass);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        .mode-toggle:hover {
+            transform: scale(1.1);
+        }
+        .board-selection, .class-selection {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .board-btn, .class-btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.2rem;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .board-btn::before, .class-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        .board-btn:hover::before, .class-btn:hover::before {
+            left: 100%;
+        }
+        .board-btn:hover, .class-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        .board-btn.active, .class-btn.active {
+            background: rgba(108, 92, 231, 0.4);
+            border: 1px solid var(--primary);
+        }
+        .subject-selection, .year-selection, .set-selection {
+            display: none;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        .subject-btn, .year-btn, .set-btn {
+            padding: 1rem 2rem;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .subject-btn:hover, .year-btn:hover, .set-btn:hover {
+            transform: translateY(-3px);
+            background: rgba(108, 92, 231, 0.3);
+        }
+        .subject-btn.active, .year-btn.active, .set-btn.active {
+            background: rgba(108, 92, 231, 0.5);
+            border: 1px solid var(--primary);
+        }
+        .pyq-container {
+            display: none;
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            margin-bottom: 3rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pyq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.6);
+        }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 3rem;
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        @media (max-width: 768px) {
+            .board-selection, .class-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+            .board-btn, .class-btn {
+                width: 100%;
+            }
+            .logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div id="particles-js"></div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">✨ PYQ Galaxy</div>
+            <p>These Are Just Joke So Relax And Enjoy</p>
+            <button class="mode-toggle" id="modeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <!-- Board Selection -->
+        <div class="board-selection">
+            <button class="board-btn" onclick="selectBoard('up')">
+                <i class="fas fa-school"></i> UP BOARD
+            </button>
+            <button class="board-btn" onclick="selectBoard('hbse')">
+                <i class="fas fa-school"></i> HBSE
+            </button>
+            <button class="board-btn" onclick="selectBoard('cbse')">
+                <i class="fas fa-school"></i> CBSE
+            </button>
+            <button class="board-btn" onclick="selectBoard('icse')">
+                <i class="fas fa-school"></i> ICSE
+            </button>
+        </div>
+
+        <!-- Class Selection -->
+        <div id="class-selection" class="class-selection" style="display:none;">
+            <button class="class-btn" onclick="selectClass('class10')">
+                <i class="fas fa-rocket"></i> Class 10
+            </button>
+            <button class="class-btn" onclick="selectClass('class12')">
+                <i class="fas fa-atom"></i> Class 12
+            </button>
+        </div>
+
+        <!-- Class 10 Subjects -->
+        <div id="class10-subjects" class="subject-selection">
+            <button class="subject-btn" onclick="selectSubject('math10')">
+                <i class="fas fa-square-root-alt"></i> Mathematics
+            </button>
+            <button class="subject-btn" onclick="selectSubject('science10')">
+                <i class="fas fa-flask"></i> Science
+            </button>
+            <button class="subject-btn" onclick="selectSubject('english10')">
+                <i class="fas fa-language"></i> English
+            </button>
+            <button class="subject-btn" onclick="selectSubject('hindi10')">
+                <i class="fas fa-book"></i> Hindi
+            </button>
+            <button class="subject-btn" onclick="selectSubject('sst10')">
+                <i class="fas fa-globe-asia"></i> Social Science
+            </button>
+            <button class="subject-btn" onclick="selectSubject('it10')">
+                <i class="fas fa-laptop-code"></i> IT
+            </button>
+        </div>
+
+        <!-- Class 12 Subjects -->
+        <div id="class12-subjects" class="subject-selection">
+            <button class="subject-btn" onclick="selectSubject('physics12')">
+                <i class="fas fa-atom"></i> Physics
+            </button>
+            <button class="subject-btn" onclick="selectSubject('chemistry12')">
+                <i class="fas fa-vial"></i> Chemistry
+            </button>
+            <button class="subject-btn" onclick="selectSubject('biology12')">
+                <i class="fas fa-dna"></i> Biology
+            </button>
+            <button class="subject-btn" onclick="selectSubject('english12')">
+                <i class="fas fa-language"></i> English
+            </button>
+            <button class="subject-btn" onclick="selectSubject('it12')">
+                <i class="fas fa-laptop-code"></i> IT
+            </button>
+        </div>
+
+        <!-- Year Selection -->
+        <div id="year-selection" class="year-selection">
+            <button class="year-btn" onclick="selectYear('2024')">2024</button>
+            <button class="year-btn" onclick="selectYear('2023')">2023</button>
+            <button class="year-btn" onclick="selectYear('2022')">2022</button>
+            <button class="year-btn" onclick="selectYear('2021')">2021</button>
+            <button class="year-btn" onclick="selectYear('2020')">2020</button>
+        </div>
+
+        <!-- Set Selection -->
+        <div id="set-selection" class="set-selection">
+            <button class="set-btn" onclick="selectSet('A')">SET A</button>
+            <button class="set-btn" onclick="selectSet('B')">SET B</button>
+            <button class="set-btn" onclick="selectSet('C')">SET C</button>
+            <button class="set-btn" onclick="selectSet('D')">SET D</button>
+        </div>
+
+        <!-- PYQ Display Area -->
+        <div id="pyq-container" class="pyq-container">
+            <div class="pyq-header">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <h2 id="pyq-title">Class 10 Mathematics - 2023 - SET A</h2>
+            </div>
+            <p id="pyq-description">Previous year question paper with detailed solutions</p>
+            <a href="#" id="pyq-download" class="download-btn" target="_blank">
+                <i class="fas fa-download"></i> Download PDF
+            </a>
+        </div>
+
+        <footer>
+            <p>  FRQ </p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Particles.js
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#a29bfe" },
+                "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#6c5ce7", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" }
+                }
+            }
+        });
+
+        // Global variables
+        let currentBoard = '';
+        let currentClass = '';
+        let currentSubject = '';
+        let currentYear = '';
+        let currentSet = '';
+        let isDarkMode = true;
+
+        // PDF Links Database
+        const pdfLinks = {
+            'hbse': {
+                'class12': {
+                    'physics12': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/64559c24400defa3745b7defa19247cb.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/c806192e219028377b8bb6fe1894526c.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/e330d0838347dfcfbe88c9527d4049fb.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/25177355881ab695c61d4865f4035cf4.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/398e1dcaacc6c460de222c6973e0e7fc.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/b9b1b03e0b1bee2c8656c9476697d9f2.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/815901522aa1a6ec090deb0710e947dd.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/efa228b6a07b0f5df4e10fc88850ce6c.pdf'
+                        }
+                    },
+                    'chemistry12': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/5c1892b2a1863509dce24e83cf39201a.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/1a6f4617eb9e72f0064a74c1200dffe9.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/4c1404aaf9006d40ed3d44cb76053088.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/5f662ee74065b534e154c92f82640722.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/cc6d6a26c0d8a7f239a2b172c30cc3fe.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/7c0002de0b9a5865af306128064fa605.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/be297a1e5f68dbd798b8f61fa2273969.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/764412833493de1ee1e721ffd5472fa0.pdf'
+                        }
+                    },
+                    'biology12': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/80063382adc09f86050fa4e921cee81d.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/205c2258a71889332c5126ddd40c0c82.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/a93c86c7b1f719052552ef0b7b05498c.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/790d8236ab3f7e544ed648fb85379e01.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/7abdcb0ef9e9c893b5366015acc42a93.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/b52a646f250a6db1f975ed73148df12f.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/8b0c05999a8db9151e23706265163730.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/2770cef5a5b5365dd0df7e3d22aa7b5d.pdf'
+                        }
+                    },
+                    'it12': {
+                        '2024': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2023': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2022': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2021': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2020': { 'A': '', 'B': '', 'C': '', 'D': '' }
+                    }
+                },
+                'class10': {
+                    'math10': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/b3d418ff3ee9af4473972ea469cdca31.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/c94bfb65e05cb172ff3d9c10c4411493.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/b5403af96785b1aec464550027a180b4.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/5f19c38f2624cd6b1e94ee5a203d4c6e.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/d0953eb004905e486c1da97e0a6c9309.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/1ea0905723d1c114ff029ae4255245c3.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/f78db6acd5b6814ebbc64520f18ed3ed.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/4f39dd369b259516c1c36eb34eb8f9ab.pdf'
+                        }
+                    },
+                    'science10': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/156344f3e07af0eb3716175442f4822e.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/e4ebaf4c85565ed3cc41c6da74d14c50.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/484b74eca169e9ea83d94cf79ce4bd8e.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/4244a6f42320db99fa0f9bf01d0a0ec4.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/4f802a18045b93c17c375625e74a19a0.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/7de64620b6671221b1b9d5fe35c8f465.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/14553d7e80310ced84c7742b51a4064f.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/0ea041350bc9148e7b0a7df098d68291.pdf'
+                        }
+                    },
+                    'english10': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/1ebb7b817ed54417566e4db6346bea87.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/dbe03bf05dbb1ef9f764ba9ed08f5950.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/9f67207dbea730cbec4961f3fdfe396a.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/29c6a828eb451579925cf50fe996fae8.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/ab7497c15ae71422b98414fb8abdd515.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/73cd5ec951e4cf1fd5d21a81cdf40475.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/b3d63e8d330f6b3fa58c9c41354232b6.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/88a0d2e2d7b29b6c9b16813c9349607e.pdf'
+                        }
+                    },
+                    'hindi10': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/66b4c28bc7207453c19caa53c5619f68.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/702ede55ac7a052e3985a2fc6f216dc7.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/5fbc576f3bb46cb6ea2d62578f8c81ae.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/3666557920085436a549654ecd235b61.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/cbb7acbe86a64bc98a1019f99bfb67f2.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/61068b0fbc2b874054d0e90153e43742.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/2de1b13f9bb59692dc30866bb674cad1.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/4d302eb5683fcbfdc94afa7a8c70ea25.pdf'
+                        }
+                    },
+                    'sst10': {
+                        '2024': {
+                            'A': 'https://bseh.org.in/uploads/files/606ed41114d9734ef7e2cdc39af7a30a.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/f83ef90867d46c7412394486887a9cff.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/458c3c8bbfc8986c568e0582ca2ed101.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/034d2b68e9ad3b419e97e6a123e99343.pdf'
+                        },
+                        '2023': {
+                            'A': 'https://bseh.org.in/uploads/files/d0472a261d48eaad2f9872f40bc99e74.pdf',
+                            'B': 'https://bseh.org.in/uploads/files/9688d49a2bccff9f0a63780a09255e82.pdf',
+                            'C': 'https://bseh.org.in/uploads/files/454c2fb57bfd503ac544f2006bad6e49.pdf',
+                            'D': 'https://bseh.org.in/uploads/files/ac428119d45abfb2a64f9083ec8a19ea.pdf'
+                        }
+                    },
+                    'it10': {
+                        '2024': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2023': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2022': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2021': { 'A': '', 'B': '', 'C': '', 'D': '' },
+                        '2020': { 'A': '', 'B': '', 'C': '', 'D': '' }
+                    }
+                }
+            }
+        };
+
+        // DOM Elements
+        const modeToggle = document.getElementById('modeToggle');
+
+        // Mode Toggle
+        modeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            document.body.style.background = isDarkMode 
+                ? 'linear-gradient(135deg, #2d3436 0%, #000000 100%)' 
+                : 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)';
+            modeToggle.innerHTML = isDarkMode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            createConfetti();
+        });
+
+        // Create confetti
+        function createConfetti() {
+            const colors = ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe'];
+            const container = document.getElementById('confetti-container');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = -10 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = confetti.style.width;
+                container.appendChild(confetti);
+                
+                let animation = confetti.animate([
+                    { top: '-10px', opacity: 1, transform: 'rotate(0deg)' },
+                    { top: '100vh', opacity: 0, transform: 'rotate(360deg)' }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        // Board selection
+        function selectBoard(board) {
+            playSound('pop');
+            
+            // Reset UI
+            document.querySelectorAll('.board-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('class-selection').style.display = 'none';
+            document.querySelectorAll('.subject-selection').forEach(div => div.style.display = 'none');
+            document.getElementById('year-selection').style.display = 'none';
+            document.getElementById('set-selection').style.display = 'none';
+            document.getElementById('pyq-container').style.display = 'none';
+
+            // Set active board
+            currentBoard = board;
+            event.target.classList.add('active');
+            createConfetti();
+
+            // Show class selection
+            document.getElementById('class-selection').style.display = 'flex';
+        }
+
+        // Class selection
+        function selectClass(className) {
+            playSound('pop');
+            
+            // Reset UI
+            document.querySelectorAll('.class-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.subject-selection').forEach(div => div.style.display = 'none');
+            document.getElementById('year-selection').style.display = 'none';
+            document.getElementById('set-selection').style.display = 'none';
+            document.getElementById('pyq-container').style.display = 'none';
+
+            // Set active class
+            currentClass = className;
+            event.target.classList.add('active');
+            createConfetti();
+
+            // Show subjects
+            document.getElementById(`${className}-subjects`).style.display = 'flex';
+        }
+
+        // Subject selection
+        function selectSubject(subject) {
+            playSound('click');
+            document.querySelectorAll('.subject-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('year-selection').style.display = 'none';
+            document.getElementById('set-selection').style.display = 'none';
+            document.getElementById('pyq-container').style.display = 'none';
+
+            currentSubject = subject;
+            event.target.classList.add('active');
+            document.getElementById('year-selection').style.display = 'flex';
+        }
+
+        // Year selection
+        function selectYear(year) {
+            playSound('success');
+            document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('set-selection').style.display = 'none';
+            document.getElementById('pyq-container').style.display = 'none';
+
+            currentYear = year;
+            event.target.classList.add('active');
+            document.getElementById('set-selection').style.display = 'flex';
+        }
+
+        // Set selection
+        function selectSet(set) {
+            playSound('success');
+            document.querySelectorAll('.set-btn').forEach(btn => btn.classList.remove('active'));
+
+            currentSet = set;
+            event.target.classList.add('active');
+            showPYQ();
+            createConfetti();
+        }
+
+        // Show PYQ
+        function showPYQ() {
+            const pyqContainer = document.getElementById('pyq-container');
+            const pyqTitle = document.getElementById('pyq-title');
+            const pyqDownload = document.getElementById('pyq-download');
+            
+            // Set title
+            let className = currentClass === 'class10' ? 'Class 10' : 'Class 12';
+            let subjectName = getSubjectName();
+            let boardName = getBoardName();
+            
+            pyqTitle.textContent = `${boardName} | ${className} ${subjectName} - ${currentYear} - SET ${currentSet}`;
+            
+            // Set download link
+            let pdfLink = '';
+            if (currentBoard === 'hbse') {
+                try {
+                    pdfLink = pdfLinks.hbse[currentClass][currentSubject][currentYear][currentSet];
+                } catch (e) {
+                    pdfLink = '';
+                }
+            }
+            
+            if (pdfLink) {
+                pyqDownload.href = pdfLink;
+                pyqDownload.style.display = 'inline-flex';
+                pyqDownload.innerHTML = '<i class="fas fa-download"></i> Download PDF';
+            } else {
+                pyqDownload.style.display = 'none';
+                pyqDownload.innerHTML = '';
+            }
+            
+            // Show container
+            pyqContainer.style.display = 'block';
+        }
+
+        // Get board name
+        function getBoardName() {
+            switch(currentBoard) {
+                case 'up': return 'UP BOARD';
+                case 'hbse': return 'HBSE';
+                case 'cbse': return 'CBSE';
+                case 'icse': return 'ICSE';
+                default: return '';
+            }
+        }
+
+        // Get subject name
+        function getSubjectName() {
+            if (currentClass === 'class10') {
+                switch(currentSubject) {
+                    case 'math10': return 'Mathematics';
+                    case 'science10': return 'Science';
+                    case 'english10': return 'English';
+                    case 'hindi10': return 'Hindi';
+                    case 'sst10': return 'Social Science';
+                    case 'it10': return 'Information Technology';
+                }
+            } else {
+                switch(currentSubject) {
+                    case 'physics12': return 'Physics';
+                    case 'chemistry12': return 'Chemistry';
+                    case 'biology12': return 'Biology';
+                    case 'english12': return 'English';
+                    case 'it12': return 'Information Technology';
+                }
+            }
+        }
+
+        // Back navigation
+        function goBack() {
+            playSound('back');
+            if (currentSet !== '') {
+                currentSet = '';
+                document.getElementById('pyq-container').style.display = 'none';
+                document.getElementById('set-selection').style.display = 'flex';
+            } else if (currentYear !== '') {
+                currentYear = '';
+                document.getElementById('set-selection').style.display = 'none';
+                document.getElementById('year-selection').style.display = 'flex';
+            } else if (currentSubject !== '') {
+                currentSubject = '';
+                document.getElementById('year-selection').style.display = 'none';
+                document.getElementById(`${currentClass}-subjects`).style.display = 'flex';
+            } else if (currentClass !== '') {
+                currentClass = '';
+                document.querySelectorAll('.subject-selection').forEach(div => div.style.display = 'none');
+                document.getElementById('class-selection').style.display = 'flex';
+            } else if (currentBoard !== '') {
+                currentBoard = '';
+                document.getElementById('class-selection').style.display = 'none';
+                document.querySelectorAll('.board-btn').forEach(btn => btn.classList.remove('active'));
+            }
+        }
+
+        // Sound effects
+        function playSound(type) {
+            if (typeof Audio !== 'undefined') {
+                const sounds = {
+                    pop: 'https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3',
+                    click: 'https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3',
+                    success: 'https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3',
+                    back: 'https://assets.mixkit.co/sfx/preview/mixkit-quick-jump-arcade-game-239.mp3'
+                };
+                const audio = new Audio(sounds[type]);
+                audio.volume = 0.3;
+                audio.play();
+            }
+        }
+    </script>
+</body>
+</html>
